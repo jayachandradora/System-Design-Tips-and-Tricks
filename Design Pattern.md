@@ -1,0 +1,3 @@
+# System-Design-Tips-and-Tricks
+System Design Tips and Tricks
+![image](https://user-images.githubusercontent.com/115500959/195582215-52ae69df-9d45-4b17-91aa-f5a8604a20cf.png)
