@@ -1,7 +1,7 @@
 # System-Design-Tips-and-Tricks
 System Design Tips and Tricks
 
-![image](https://user-images.githubusercontent.com/115500959/195559223-15e4c2ff-9075-450a-9156-e28d874c35d1.png)
+![image](https://user-images.githubusercontent.com/115500959/195559813-649575bb-8996-4fcd-a743-d9639a343a87.png)
 
 What are some of the algorithms you should know before taking system design interviews? <br>
 I put together a list and explained why they are important. Those algorithms are not only useful for interviews but good to understand for any software engineer. <br>
