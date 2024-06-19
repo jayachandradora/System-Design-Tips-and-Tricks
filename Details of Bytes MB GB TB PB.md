@@ -46,7 +46,7 @@
   - Usage: The largest unit of digital storage measurement; used in theoretical discussions about the total amount of digital data in existence.
 
 
-# Capacity Estimation during System Design Interviews
+# Capacity Estimation during System Design
 
 During a system design interview, capacity estimation is crucial for demonstrating your ability to analyze requirements and scale a system effectively. Here's a simplified approach to perform capacity estimation:
 
