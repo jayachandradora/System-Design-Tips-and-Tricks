@@ -44,3 +44,56 @@
   - Definition: 1 YB = 1,024 ZB = 1,208,925,819,614,629,174,706,176 bytes.
   - Equivalence: 1 YB = 2^80 bytes.
   - Usage: The largest unit of digital storage measurement; used in theoretical discussions about the total amount of digital data in existence.
+
+
+# Capacity Estimation during System Design Interviews
+
+During a system design interview, capacity estimation is crucial for demonstrating your ability to analyze requirements and scale a system effectively. Here's a simplified approach to perform capacity estimation:
+
+### 1. Understand Requirements:
+
+- **Define Use Cases**: Clearly understand the primary functions of the system (e.g., messaging, e-commerce, social media).
+- **User Base**: Estimate or be given the number of active users.
+- **Traffic Patterns**: Identify peak usage times and expected growth rates.
+
+### 2. Break Down Components:
+
+- **Identify Components**: Determine the major components such as web servers, application servers, databases, and external APIs.
+- **Data Storage**: Calculate storage requirements for user data, content (e.g., photos, videos), and transactional data.
+
+### 3. Apply Rough Estimates:
+
+- **Use Rules of Thumb**: Employ general guidelines for estimating:
+  - **Bandwidth**: Assume average data transfer rates or usage patterns.
+  - **Storage**: Estimate based on data types and volumes (e.g., transactions per user, media storage).
+
+### 4. Example Calculation:
+
+- **Bandwidth**: Estimate based on average data usage per user (e.g., messages sent/received per day).
+  - Example: Assume 1,000,000 users, each sending/receiving 20 messages/day (200 bytes/message).
+    - Daily Data Volume = 1,000,000 * 20 * 200 bytes = 4,000,000,000 bytes = 4 GB/day
+    - Peak Load Factor = 2 (for peak times)
+    - Peak Data Volume = 8 GB/day
+
+- **Storage**: Calculate based on user data, transactional data, and media content.
+  - Example: Assume user profiles (1 KB each) and transactional data (4 GB/day).
+    - User Profiles = 1,000,000 * 1 KB = 1,000,000 KB = 1,000 MB = 1 GB
+    - Messages (1 day) = 4 GB/day
+
+### 5. Consider Scalability:
+
+- **Horizontal vs. Vertical Scaling**: Discuss strategies for scaling horizontally (adding more servers) or vertically (increasing server capacity).
+- **Load Balancing**: Address load distribution across servers to manage traffic efficiently.
+
+### 6. Justify Assumptions:
+
+- **Explain Reasoning**: Clearly articulate your assumptions and reasoning behind your estimations.
+- **Discuss Trade-offs**: Consider trade-offs between performance, cost, and infrastructure complexity.
+
+### Tips:
+
+- **Practice**: Familiarize yourself with common scenarios and calculations before the interview.
+- **Communication**: Clearly communicate your approach, assumptions, and calculations to the interviewer.
+- **Iterate**: Be prepared to adjust your estimations based on feedback and further discussion during the interview.
+
+By following these steps and tips, you can approach capacity estimation confidently during a system design interview, showcasing your ability to analyze requirements and design scalable systems effectively.
