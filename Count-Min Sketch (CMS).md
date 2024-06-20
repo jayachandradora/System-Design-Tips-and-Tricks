@@ -93,23 +93,23 @@ public class CountMinSketch {
 
 ### Explanation
 
-**Depth and Width:** depth determines the number of hash functions and width specifies the size of the sketch array.
+   - **Depth and Width:** depth determines the number of hash functions and width specifies the size of the sketch array.
 
-**Hash Functions:** hash1 and hash2 are used to compute the indices for storing and retrieving counts in the sketch. They should be independent to minimize collisions.
+   - **Hash Functions:** hash1 and hash2 are used to compute the indices for storing and retrieving counts in the sketch. They should be independent to minimize collisions.
 
-**Increment Method:** Increases the count of the specified key in each row of the sketch based on its hashed indices.
+   - **Increment Method:** Increases the count of the specified key in each row of the sketch based on its hashed indices.
 
-**Estimate Method:** Retrieves the minimum count of the key across all rows in the sketch, providing an estimate of its frequency.
+   - **Estimate Method:** Retrieves the minimum count of the key across all rows in the sketch, providing an estimate of its frequency.
 
-**Example Usage:** Demonstrates how to increment counts for a set of keys ("apple", "banana", "cherry") and estimate their frequencies using the Count-Min Sketch.
+   - **Example Usage:** Demonstrates how to increment counts for a set of keys ("apple", "banana", "cherry") and estimate their frequencies using the Count-Min Sketch.
 
 ### Considerations:
 
-**Accuracy:** The accuracy of Count-Min Sketch depends on the chosen depth and width. Increasing these values improves accuracy but also increases memory usage.
+   - **Accuracy:** The accuracy of Count-Min Sketch depends on the chosen depth and width. Increasing these values improves accuracy but also increases memory usage.
 
-**Collision Handling:** Hash functions should be chosen carefully to minimize collisions and ensure that each hash function provides independent indices.
+   - **Collision Handling:** Hash functions should be chosen carefully to minimize collisions and ensure that each hash function provides independent indices.
 
-**Memory Efficiency:** Count-Min Sketch uses a fixed amount of memory (depth x width) regardless of the number of distinct keys observed, making it suitable for large-scale data streams.
+   - **Memory Efficiency:** Count-Min Sketch uses a fixed amount of memory (depth x width) regardless of the number of distinct keys observed, making it suitable for large-scale data streams.
 
 Implementing Count-Min Sketch in Java allows for efficient frequency estimation and summarization of large data streams, making it a powerful tool in scenarios where memory and real-time processing are critical considerations.
 Adjust depth and width based on your specific requirements for accuracy and memory usage.
