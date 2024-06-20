@@ -160,6 +160,8 @@ public class Main {
 
 Probing involves finding an alternative slot within the hash table when a collision occurs. Here's an example implementation using linear probing in Java:
 
+#### Example of linear probing in Java
+
 ```java
 // Hash table implementation with linear probing
 class HashTableLinearProbing<K, V> {
@@ -252,10 +254,218 @@ public class Main {
 
 ```
 
+#### Example of Quadratic Probing Implementation in Java
+
+```java
+// Hash table implementation with quadratic probing
+class HashTableQuadraticProbing<K, V> {
+    private K[] keys;
+    private V[] values;
+    private int capacity;
+    private int size;
+
+    public HashTableQuadraticProbing(int capacity) {
+        this.capacity = capacity;
+        this.keys = (K[]) new Object[capacity];
+        this.values = (V[]) new Object[capacity];
+        this.size = 0;
+    }
+
+    // Hash function to get index
+    private int hashFunction(K key) {
+        return Math.abs(key.hashCode() % capacity);
+    }
+
+    // Put key-value pair into hash table
+    public void put(K key, V value) {
+        if (size >= capacity) {
+            throw new RuntimeException("Hash table is full");
+        }
+        int index = hashFunction(key);
+        int i = 1;
+        while (keys[index] != null) {
+            if (keys[index].equals(key)) {
+                values[index] = value; // Update existing value
+                return;
+            }
+            index = (index + i * i) % capacity; // Quadratic probing
+            i++;
+        }
+        keys[index] = key;
+        values[index] = value;
+        size++;
+    }
+
+    // Get value associated with key from hash table
+    public V get(K key) {
+        int index = hashFunction(key);
+        int i = 1;
+        while (keys[index] != null) {
+            if (keys[index].equals(key)) {
+                return values[index];
+            }
+            index = (index + i * i) % capacity; // Quadratic probing
+            i++;
+        }
+        return null;
+    }
+
+    // Remove key-value pair from hash table
+    public void remove(K key) {
+        int index = hashFunction(key);
+        int i = 1;
+        while (keys[index] != null) {
+            if (keys[index].equals(key)) {
+                keys[index] = null;
+                values[index] = null;
+                size--;
+                return;
+            }
+            index = (index + i * i) % capacity; // Quadratic probing
+            i++;
+        }
+    }
+
+    // Check if hash table is empty
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    // Get size of hash table
+    public int size() {
+        return size;
+    }
+}
+
+// Example usage
+public class Main {
+    public static void main(String[] args) {
+        HashTableQuadraticProbing<String, Integer> hashTable = new HashTableQuadraticProbing<>(10);
+        hashTable.put("John", 30);
+        hashTable.put("Jane", 25);
+        hashTable.put("Doe", 40);
+
+        System.out.println("Age of John: " + hashTable.get("John")); // Output: 30
+
+        hashTable.remove("Jane");
+        System.out.println("Size of hash table: " + hashTable.size()); // Output: 2
+    }
+}
+
+```
+
+#### Example of Double Hashing Implementation in Java
+
+``` Java
+// Hash table implementation with double hashing
+class HashTableDoubleHashing<K, V> {
+    private K[] keys;
+    private V[] values;
+    private int capacity;
+    private int size;
+
+    public HashTableDoubleHashing(int capacity) {
+        this.capacity = capacity;
+        this.keys = (K[]) new Object[capacity];
+        this.values = (V[]) new Object[capacity];
+        this.size = 0;
+    }
+
+    // Hash function to get index
+    private int hashFunction(K key) {
+        return Math.abs(key.hashCode() % capacity);
+    }
+
+    // Secondary hash function for double hashing
+    private int secondaryHashFunction(K key) {
+        // Example secondary hash function using a prime number
+        int prime = 31;
+        return prime - (Math.abs(key.hashCode() % prime));
+    }
+
+    // Put key-value pair into hash table
+    public void put(K key, V value) {
+        if (size >= capacity) {
+            throw new RuntimeException("Hash table is full");
+        }
+        int index = hashFunction(key);
+        int step = secondaryHashFunction(key);
+        while (keys[index] != null) {
+            if (keys[index].equals(key)) {
+                values[index] = value; // Update existing value
+                return;
+            }
+            index = (index + step) % capacity; // Double hashing
+        }
+        keys[index] = key;
+        values[index] = value;
+        size++;
+    }
+
+    // Get value associated with key from hash table
+    public V get(K key) {
+        int index = hashFunction(key);
+        int step = secondaryHashFunction(key);
+        while (keys[index] != null) {
+            if (keys[index].equals(key)) {
+                return values[index];
+            }
+            index = (index + step) % capacity; // Double hashing
+        }
+        return null;
+    }
+
+    // Remove key-value pair from hash table
+    public void remove(K key) {
+        int index = hashFunction(key);
+        int step = secondaryHashFunction(key);
+        while (keys[index] != null) {
+            if (keys[index].equals(key)) {
+                keys[index] = null;
+                values[index] = null;
+                size--;
+                return;
+            }
+            index = (index + step) % capacity; // Double hashing
+        }
+    }
+
+    // Check if hash table is empty
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    // Get size of hash table
+    public int size() {
+        return size;
+    }
+}
+
+// Example usage
+public class Main {
+    public static void main(String[] args) {
+        HashTableDoubleHashing<String, Integer> hashTable = new HashTableDoubleHashing<>(10);
+        hashTable.put("John", 30);
+        hashTable.put("Jane", 25);
+        hashTable.put("Doe", 40);
+
+        System.out.println("Age of John: " + hashTable.get("John")); // Output: 30
+
+        hashTable.remove("Jane");
+        System.out.println("Size of hash table: " + hashTable.size()); // Output: 2
+    }
+}
+
+```
+
 ### Explanation
 
 **Chaining:** Uses a hash table where each bucket stores a linked list of key-value pairs. Collisions are handled by appending entries to the linked list at the hashed index.
 
 **Probing (Linear Probing):** Implements a hash table where collisions are resolved by probing linearly through the table to find the next available slot.
+
+**Quadratic Probing:** Increases the step size quadratically using (index + i * i) % capacity to probe each subsequent slot, where i starts from 1 and increments.
+
+**Double Hashing:** Uses a secondary hash function to calculate the step size, probing slots using (index + step) % capacity, where step is determined by the secondary hash function.
 
 These implementations illustrate how Java can be used to create hash tables with chaining and probing strategies for handling hash collisions effectively. Adjustments and optimizations can be made based on specific use cases and requirements.
