@@ -1,5 +1,7 @@
 # Count-Min Sketch: Use Cases and Java Implementation
 
+The Count-Min Sketch (CMS) is a probabilistic data structure used for summarizing data streams and estimating frequencies of elements efficiently. It's particularly useful in scenarios where you need to process massive amounts of data in real-time and require approximate counts with limited memory usage. Here are some common use cases and implementation details of Count-Min Sketch in Java:
+
 ## Use Cases
 
 1. **Frequency Estimation in Data Streams**:
