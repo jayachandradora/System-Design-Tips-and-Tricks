@@ -24,22 +24,23 @@ Certainly! Bloom filters are probabilistic data structures used for membership t
 ### Bloom Filter Java Implementation
 
 ```java
+
 import java.util.BitSet;
 
 public class BloomFilter {
     private BitSet bitSet;
     private int size;
-    private int[] hashFunctions;
+    private int numHashFunctions;
 
     public BloomFilter(int size, int numHashFunctions) {
         this.size = size;
         this.bitSet = new BitSet(size);
-        this.hashFunctions = new int[numHashFunctions];
+        this.numHashFunctions = numHashFunctions;
     }
 
     // Add an element to the Bloom filter
     public void add(String element) {
-        for (int i = 0; i < hashFunctions.length; i++) {
+        for (int i = 0; i < numHashFunctions; i++) {
             int index = hash(element, i);
             bitSet.set(index, true);
         }
@@ -47,7 +48,7 @@ public class BloomFilter {
 
     // Check if an element might be in the Bloom filter
     public boolean contains(String element) {
-        for (int i = 0; i < hashFunctions.length; i++) {
+        for (int i = 0; i < numHashFunctions; i++) {
             int index = hash(element, i);
             if (!bitSet.get(index)) {
                 return false;
@@ -56,13 +57,17 @@ public class BloomFilter {
         return true;
     }
 
-    // Hash function using Java's hashCode combined with a salt
+    // Hash function using Java's hashCode combined with a salt and modulo size
     private int hash(String element, int salt) {
-        return (element.hashCode() ^ hashFunctions[salt]) % size;
+        int hash = 0;
+        for (int i = 0; i < element.length(); i++) {
+            hash = 31 * hash + element.charAt(i); // Adjust the multiplier as needed
+        }
+        return Math.abs ((hash ^ salt) % size);
     }
 
     public static void main(String[] args) {
-        BloomFilter bloomFilter = new BloomFilter(100, 3); // Size 100, 3 hash functions
+        BloomFilter bloomFilter = new BloomFilter(10, 3); // Size 100, 3 hash functions
 
         // Add elements to the Bloom filter
         bloomFilter.add("apple");
@@ -71,9 +76,10 @@ public class BloomFilter {
 
         // Check membership
         System.out.println("Contains 'apple': " + bloomFilter.contains("apple")); // Output: true
-        System.out.println("Contains 'orange': " + bloomFilter.contains("orange")); // Output: false (may be a false positive)
+        System.out.println("Contains 'orange': " + bloomFilter.contains("orange")); // Output: false
     }
 }
+
 ```
 
 ### Explanation:
