@@ -1,4 +1,4 @@
-## Data Synchronizing Techniques with Multiple Data Cetneters
+## Data Synchronizing Techniques with Multiple Data Centers
 
 Synchronizing data across multiple data centers involves implementing strategies and technologies that ensure data consistency, availability, and reliability across geographically distributed locations. Here’s a structured approach to achieve data synchronization in a multi-data center environment:
 
