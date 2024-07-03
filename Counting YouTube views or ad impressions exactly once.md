@@ -49,3 +49,10 @@ Here are some best approaches to achieve this:
 - **YouTube Views**: YouTube uses a combination of client-side tracking (e.g., JavaScript on the video player) and server-side validation (e.g., unique request identifiers) to count views exactly once per user per video.
 
 By combining these approaches, you can ensure that YouTube views, ad impressions, or any similar metrics are counted accurately without duplication, thereby providing reliable data for analytics and reporting purposes. These strategies also help maintain data integrity and consistency across distributed and scalable systems.
+
+### HLD Solution - Apacy Streaming & Cassendra
+
+https://www.youtube.com/watch?v=QqhMlO1YTEE&list=UULFGr0PIOsKpmZNmrR4Ov1jcg&index=6
+
+
+<img width="1761" alt="image" src="https://github.com/jayachandradora/System-Design-Tips-and-Tricks/assets/115500959/9b63c30a-2279-45e0-bd05-57aad2bd558b">
