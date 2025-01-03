@@ -93,6 +93,108 @@ public class CountMinSketch {
 }
 ```
 
+Here's the equivalent Go implementation of the `CountMinSketch` class:
+
+```go
+package main
+
+import (
+	"fmt"
+	"hash/fnv"
+	"math"
+)
+
+type CountMinSketch struct {
+	depth  int
+	width  int
+	sketch [][]int
+}
+
+// Constructor to initialize the CountMinSketch
+func NewCountMinSketch(depth, width int) *CountMinSketch {
+	sketch := make([][]int, depth)
+	for i := 0; i < depth; i++ {
+		sketch[i] = make([]int, width)
+	}
+	return &CountMinSketch{
+		depth:  depth,
+		width:  width,
+		sketch: sketch,
+	}
+}
+
+// Hash function 1
+func hash1(key string, width int) int {
+	h := fnv.New32a()
+	h.Write([]byte(key))
+	return int(h.Sum32() % uint32(width))
+}
+
+// Hash function 2
+func hash2(key string, width int) int {
+	h := fnv.New32a()
+	h.Write([]byte(key))
+	hashVal := int(h.Sum32())
+	return int(math.Abs(float64(hashVal*31)) % float64(width))
+}
+
+// Increment the count of key in the sketch
+func (cms *CountMinSketch) Increment(key string) {
+	for i := 0; i < cms.depth; i++ {
+		index := (hash1(key, cms.width) + i*hash2(key, cms.width)) % cms.width
+		cms.sketch[i][index]++
+	}
+}
+
+// Estimate the count of a key
+func (cms *CountMinSketch) Estimate(key string) int {
+	minCount := math.MaxInt
+	for i := 0; i < cms.depth; i++ {
+		index := (hash1(key, cms.width) + i*hash2(key, cms.width)) % cms.width
+		minCount = int(math.Min(float64(minCount), float64(cms.sketch[i][index])))
+	}
+	return minCount
+}
+
+// Print the sketch table for debugging
+func (cms *CountMinSketch) PrintSketch() {
+	for i := 0; i < cms.depth; i++ {
+		fmt.Println(cms.sketch[i])
+	}
+}
+
+func main() {
+	cms := NewCountMinSketch(5, 100) // Depth 5, Width 100
+
+	// Example usage
+	data := []string{"apple", "banana", "apple", "cherry", "banana", "apple"}
+	for _, key := range data {
+		cms.Increment(key)
+	}
+
+	// Estimate counts
+	fmt.Println("Estimated count of 'apple':", cms.Estimate("apple"))
+	fmt.Println("Estimated count of 'banana':", cms.Estimate("banana"))
+	fmt.Println("Estimated count of 'cherry':", cms.Estimate("cherry"))
+
+	// Print the sketch table
+	fmt.Println("\nSketch table:")
+	cms.PrintSketch()
+}
+```
+
+### Key Changes:
+1. **Hash Functions:** I used the `fnv.New32a()` from the `hash/fnv` package to replace Java's `hashCode()`. FNV is a fast hash function that produces a good distribution.
+2. **2nd Hash Function:** The second hash function uses a different method to multiply by `31` before taking the modulus with `width`, as in the original Java version.
+3. **Arrays to Slices:** In Go, slices are more commonly used than arrays when you don't know the exact size upfront, but here I've initialized a 2D slice of integers just like the original Java 2D array.
+4. **Math Package:** I used Go’s `math` package to handle `math.MaxInt` and `math.Min` for working with integers.
+
+### Execution Flow:
+- A `CountMinSketch` is created with a specified depth and width.
+- Keys (like `"apple"`, `"banana"`, and `"cherry"`) are incremented in the sketch.
+- The sketch estimates counts for the keys based on the hash functions and the structure.
+- Finally, the sketch table is printed for debugging purposes.
+
 ### Explanation
 
    - **Depth and Width:** depth determines the number of hash functions and width specifies the size of the sketch array.
