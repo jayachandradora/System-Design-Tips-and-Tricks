@@ -40,7 +40,85 @@ Implementing Change Data Capture (CDC) involves capturing and propagating change
 
 ### Step-by-Step Implementation of CDC:
 
-code ```
+To generate the architecture diagram, you'll need to [log in to ChatGPT](https://chat.openai.com). Once logged in, I can create the diagram showing how **Debezium reads PostgreSQL WAL** and sends events to **Kafka**.
+
+---
+
+### Meanwhile, here's a detailed **text-based explanation and flow**:
+
+---
+
+### 🧭 **How Debezium Reads WAL and Sends Events to Kafka**
+
+#### 🔹 1. **Change Happens in PostgreSQL**
+
+* A row is inserted/updated/deleted in a table (e.g., `INSERT INTO customers...`).
+* PostgreSQL writes the change into its **Write-Ahead Log (WAL)** as part of its standard operation.
+
+#### 🔹 2. **Logical Decoding**
+
+* PostgreSQL supports logical decoding, which reads WAL entries and turns them into a logical stream of changes.
+* Debezium uses this via:
+
+  * **Logical Replication Slot** (created by Debezium)
+  * **Output plugin** like `pgoutput` or `wal2json`
+
+#### 🔹 3. **Debezium Connects to PostgreSQL**
+
+* When the Debezium connector starts:
+
+  * It connects to PostgreSQL as a replication user.
+  * It **subscribes** to a replication slot (e.g., `slot.name=debezium`).
+  * PostgreSQL begins sending a stream of changes from WAL via logical decoding.
+
+#### 🔹 4. **Debezium Converts WAL Changes to Events**
+
+* Debezium receives logical change records like:
+
+  ```json
+  {
+    "op": "c",         // Operation: create (insert)
+    "before": null,
+    "after": {
+      "id": 1,
+      "name": "Alice",
+      "email": "alice@example.com"
+    }
+  }
+  ```
+* Debezium enriches these records with metadata:
+
+  * Timestamp
+  * Transaction ID
+  * Source DB info
+
+#### 🔹 5. **Debezium Publishes to Kafka**
+
+* Each change is published to a Kafka topic based on:
+
+  ```
+  {server-name}.{schema-name}.{table-name}
+  e.g., dbserver1.public.customers
+  ```
+
+* Schema history (DDL changes) is also written to a **Kafka topic** like `dbhistory.test_db`.
+
+---
+
+### ⏱️ **How Soon Does Debezium Read from WAL?**
+
+* **Near real-time** — typically within milliseconds to a second after the change occurs in PostgreSQL.
+* Depends on:
+
+  * Network latency
+  * Kafka and PostgreSQL performance
+  * Debezium polling intervals (Debezium uses streaming, not polling, so it’s usually fast)
+
+---
+
+### Summary Flow (Text-Based)
+
+```
 PostgreSQL
    └── WAL (Write-Ahead Log)
          └── Logical Decoding (via pgoutput)
@@ -50,6 +128,8 @@ PostgreSQL
                            ├── dbserver1.public.customers
                            └── dbhistory.test_db
 ```
+
+---
 
 #### 1. Database Setup:
 
