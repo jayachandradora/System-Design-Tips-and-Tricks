@@ -121,6 +121,66 @@ PostgreSQL
 
 ---
 
+### 1. **Connection to PostgreSQL for Logical Replication**
+
+When Debezium connects to PostgreSQL, it establishes a **JDBC connection** to the PostgreSQL database. This connection is made using the **PostgreSQL replication protocol**. The specific steps are:
+
+* **JDBC Connection**: Debezium connects to PostgreSQL using the `jdbc` connection, which is standard for PostgreSQL connectors in Kafka Connect.
+* **Replication Slot**: Once connected, Debezium requests a **logical replication slot** to start streaming changes from the WAL. This slot is set up in PostgreSQL to stream **logical changes** (insert, update, delete) rather than the raw WAL logs.
+* **Logical Decoding**: With this slot, PostgreSQL sends a continuous stream of changes (CDC data) to Debezium in the form of **logical replication messages**.
+
+### 2. **PostgreSQL Logical Replication Protocol**
+
+The **logical replication protocol** works by sending **change records** directly from the WAL (Write-Ahead Log) through **logical decoding**. These records contain information about the changes made to the database, including:
+
+* Inserted data (new rows)
+* Updated data (modified rows)
+* Deleted data (removed rows)
+
+PostgreSQL sends these changes to Debezium over a **persistent connection** (not WebSocket or SSE) as a stream. These changes are packaged in a specific format that can be decoded.
+
+---
+
+### 3. **Debezium Transformations**
+
+* Once Debezium receives this **stream of change data** from PostgreSQL, it processes and **transforms** it into **Change Data Capture (CDC) event JSON** messages.
+
+* **Debezium's role** is:
+
+  * **Decoding the logical replication messages** into a structured JSON format.
+  * Adding metadata such as the operation type (`insert`, `update`, `delete`), the source database, transaction metadata, and timestamps.
+
+* Example of a transformed CDC event from Debezium:
+
+  ```json
+  {
+    "op": "c",         // Operation: 'c' for create (insert)
+    "before": null,    // No data before (because it's an insert)
+    "after": {
+      "id": 1,
+      "name": "Alice",
+      "email": "alice@example.com"
+    },
+    "source": {
+      "db": "test_db",
+      "schema": "public",
+      "table": "customers",
+      "ts_ms": 1627889900000
+    }
+  }
+  ```
+
+### 4. **Sending CDC Events to Kafka**
+
+After transforming the WAL changes into JSON events, Debezium **publishes them to Kafka** topics. For example, Debezium might send the change to a topic like:
+
+```
+dbserver1.public.customers
+```
+
+This message will then be consumed by any Kafka consumers subscribed to that topic, enabling downstream applications to react to the changes.
+
+
 ### Step-by-Step Implementation of CDC:
 
 #### 1. Database Setup:
