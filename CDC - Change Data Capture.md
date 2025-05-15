@@ -40,6 +40,17 @@ Implementing Change Data Capture (CDC) involves capturing and propagating change
 
 ### Step-by-Step Implementation of CDC:
 
+code ```
+PostgreSQL
+   └── WAL (Write-Ahead Log)
+         └── Logical Decoding (via pgoutput)
+               └── Debezium Connector
+                     ├── Transforms to CDC event JSON
+                     └── Publishes to Kafka topics
+                           ├── dbserver1.public.customers
+                           └── dbhistory.test_db
+```
+
 #### 1. Database Setup:
 
 - **Identify Source Database**: Determine the database where changes need to be captured (e.g., MySQL, PostgreSQL, Oracle, MongoDB).
