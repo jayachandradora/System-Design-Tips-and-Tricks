@@ -38,16 +38,6 @@ In summary, CDC plays a crucial role in real-time data processing by capturing, 
 
 Implementing Change Data Capture (CDC) involves capturing and propagating changes made to a database to downstream systems or applications. Here's a step-by-step approach to implement CDC:
 
-### Step-by-Step Implementation of CDC:
-
-To generate the architecture diagram, you'll need to [log in to ChatGPT](https://chat.openai.com). Once logged in, I can create the diagram showing how **Debezium reads PostgreSQL WAL** and sends events to **Kafka**.
-
----
-
-### Meanwhile, here's a detailed **text-based explanation and flow**:
-
----
-
 ### 🧭 **How Debezium Reads WAL and Sends Events to Kafka**
 
 #### 🔹 1. **Change Happens in PostgreSQL**
@@ -130,6 +120,8 @@ PostgreSQL
 ```
 
 ---
+
+### Step-by-Step Implementation of CDC:
 
 #### 1. Database Setup:
 
